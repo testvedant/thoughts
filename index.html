@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Gwen's Thoughts</title>
+    <title>Sweet Thoughts</title>
     <style>
         body {
             font-family: 'Verdana', 'Arial', sans-serif;
@@ -205,9 +205,9 @@
     <div class="container">
         <!-- Login Form -->
         <div id="login-form">
-            <h1>Gwen's Thoughts</h1>
+            <h1>Sweet Thoughts</h1>
             <div class="hearts">♥ ♥ ♥</div>
-            <p></p>
+            <p>Share what's on your mind with your special someone</p>
             
             <div class="form-group">
                 <label for="username">Username</label>
@@ -292,8 +292,7 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            // IMPORTANT: In a real application, this authentication should happen server-side!
-            // This is just a simple demo for educational purposes.
+            // Regular user login - any username/password is fine for demo
             if (username && password) {
                 document.getElementById('login-form').classList.add('hidden');
                 document.getElementById('grievance-form').classList.remove('hidden');
@@ -318,62 +317,62 @@
             });
         });
         
-        // Storage for all submitted grievances
-        let grievancesData = {
-            email: "vedantsaran@gmail.com",
-            submissions: []
-        };
-
-        // Function to download data as JSON file
-        function downloadJSON(data, filename) {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", filename);
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-        }
-
-        // Form submission
+        // Form submission using formspree.io to send emails
         document.getElementById('submit-button').addEventListener('click', function() {
             const username = document.getElementById('greeting').textContent.replace('Welcome back, ', '').replace('! ♥', '');
             const title = document.getElementById('title').value;
             const body = document.getElementById('body').value;
             const seriousness = document.getElementById('seriousness').value;
-            const emoji = document.getElementById('selected-emoji').value;
-            const timestamp = new Date().toISOString();
+            const emoji = document.getElementById('selected-emoji').value || "None selected";
             
-            if (title && body && emoji) {
-                // Create a grievance object
-                const grievance = {
-                    username: username,
-                    title: title,
-                    body: body,
-                    seriousness: seriousness,
-                    mood: emoji,
-                    timestamp: timestamp
-                };
+            if (title && body) {
+                // Create payload for email service
+                const formData = new FormData();
+                formData.append('username', username);
+                formData.append('title', title);
+                formData.append('body', body);
+                formData.append('seriousness', seriousness + '/10');
+                formData.append('mood', emoji);
+                formData.append('_subject', `Sweet Thoughts: ${title}`);
                 
-                // Add to our data storage
-                grievancesData.submissions.push(grievance);
-                
-                // Save to local storage as backup
-                localStorage.setItem('grievances', JSON.stringify(grievancesData));
-                
-                // Create JSON file for download
-                downloadJSON(grievancesData, 'sweet_thoughts_submissions.json');
-                
-                // Format for email (in a real app)
-                const emailBody = `
-                    Title: ${title}
-                    Seriousness: ${seriousness}/10
-                    Mood: ${emoji}
-                    Submitted: ${new Date().toLocaleString()}
-                    
-                    Message:
-                    ${body}
-                `;
+                // Send to formspree email service
+                // Replace 'your-formspree-endpoint' with your actual endpoint from formspree.io
+                fetch(https://formspree.io/f/mwpoayyk, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Show success message
+                        document.getElementById('success-message').classList.remove('hidden');
+                        
+                        // Clear form
+                        document.getElementById('title').value = '';
+                        document.getElementById('body').value = '';
+                        document.getElementById('seriousness').value = '5';
+                        emojiOptions.forEach(opt => opt.classList.remove('selected'));
+                        document.getElementById('selected-emoji').value = '';
+                        
+                        // Hide success message after a few seconds
+                        setTimeout(function() {
+                            document.getElementById('success-message').classList.add('hidden');
+                        }, 5000);
+                    } else {
+                        throw new Error('Form submission failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was a problem sending your thoughts. Please try again later.');
+                });
+            } else {
+                alert("Please fill out all required fields!");
+            }
+        });
+    </script>`;
                 
                 console.log("Email that would be sent to vedantsaran@gmail.com:");
                 console.log(emailBody);
@@ -399,3 +398,5 @@
     </script>
 </body>
 </html>
+
+
