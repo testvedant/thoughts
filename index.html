@@ -229,39 +229,47 @@
             <div id="greeting" class="greeting">Welcome back! ♥</div>
             <div class="hearts">♥ ♥ ♥</div>
             
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" id="title" placeholder="What's this about?">
-            </div>
-            
-            <div class="form-group">
-                <label for="body">What's on your mind?</label>
-                <textarea id="body" placeholder="Tell me everything..."></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label for="seriousness">How serious is this? (1-10)</label>
-                <input type="range" id="seriousness" min="1" max="10" value="5">
-                <div style="display: flex; justify-content: space-between; margin-top: 5px;">
-                    <span>1</span>
-                    <span>5</span>
-                    <span>10</span>
+            <form id="thought-form" action="https://formspree.io/f/mwpoayyk" method="POST">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" placeholder="What's this about?">
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label>How are you feeling?</label>
-                <div class="emoji-selector">
-                    <div class="emoji-option" data-emoji="😊">😊</div>
-                    <div class="emoji-option" data-emoji="😢">😢</div>
-                    <div class="emoji-option" data-emoji="😡">😡</div>
-                    <div class="emoji-option" data-emoji="🥰">🥰</div>
-                    <div class="emoji-option" data-emoji="😔">😔</div>
+                
+                <div class="form-group">
+                    <label for="body">What's on your mind?</label>
+                    <textarea id="body" name="body" placeholder="Tell me everything..."></textarea>
                 </div>
-                <input type="hidden" id="selected-emoji" value="">
-            </div>
-            
-            <button id="submit-button">Send Thoughts</button>
+                
+                <div class="form-group">
+                    <label for="seriousness">How serious is this? (1-10)</label>
+                    <input type="range" id="seriousness" name="seriousness" min="1" max="10" value="5">
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <span>1</span>
+                        <span>5</span>
+                        <span>10</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>How are you feeling?</label>
+                    <div class="emoji-selector">
+                        <div class="emoji-option" data-emoji="😊">😊</div>
+                        <div class="emoji-option" data-emoji="😢">😢</div>
+                        <div class="emoji-option" data-emoji="😡">😡</div>
+                        <div class="emoji-option" data-emoji="🥰">🥰</div>
+                        <div class="emoji-option" data-emoji="😔">😔</div>
+                    </div>
+                    <input type="hidden" id="selected-emoji" name="mood" value="">
+                </div>
+                
+                <!-- Hidden field for username -->
+                <input type="hidden" id="form-username" name="username" value="">
+                
+                <!-- Add the _subject field for email subject -->
+                <input type="hidden" name="_subject" id="email-subject" value="Sweet Thoughts">
+                
+                <button type="submit" id="submit-button">Send Thoughts</button>
+            </form>
             
             <div id="success-message" class="success-message hidden">
                 <div class="cute-icon">✓</div>
@@ -297,6 +305,8 @@
                 document.getElementById('login-form').classList.add('hidden');
                 document.getElementById('grievance-form').classList.remove('hidden');
                 document.getElementById('greeting').textContent = `Welcome back, ${username}! ♥`;
+                // Set the username in the hidden form field
+                document.getElementById('form-username').value = username;
             } else {
                 document.getElementById('login-error').style.display = 'block';
             }
@@ -317,66 +327,37 @@
             });
         });
         
-        // Form submission using formspree.io to send emails
-        document.getElementById('submit-button').addEventListener('click', function() {
-            const username = document.getElementById('greeting').textContent.replace('Welcome back, ', '').replace('! ♥', '');
+        // Form submission handling
+        document.getElementById('thought-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
             const title = document.getElementById('title').value;
             const body = document.getElementById('body').value;
-            const seriousness = document.getElementById('seriousness').value;
-            const emoji = document.getElementById('selected-emoji').value || "None selected";
+            const emoji = document.getElementById('selected-emoji').value;
             
-            if (title && body) {
-                // Create payload for email service
-                const formData = new FormData();
-                formData.append('username', username);
-                formData.append('title', title);
-                formData.append('body', body);
-                formData.append('seriousness', seriousness + '/10');
-                formData.append('mood', emoji);
-                formData.append('_subject', `Sweet Thoughts: ${title}`);
-                
-                // Send to formspree email service
-                // Replace 'your-formspree-endpoint' with your actual endpoint from formspree.io
-                fetch(https://formspree.io/f/mwpoayyk, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // Show success message
-                        document.getElementById('success-message').classList.remove('hidden');
-                        
-                        // Clear form
-                        document.getElementById('title').value = '';
-                        document.getElementById('body').value = '';
-                        document.getElementById('seriousness').value = '5';
-                        emojiOptions.forEach(opt => opt.classList.remove('selected'));
-                        document.getElementById('selected-emoji').value = '';
-                        
-                        // Hide success message after a few seconds
-                        setTimeout(function() {
-                            document.getElementById('success-message').classList.add('hidden');
-                        }, 5000);
-                    } else {
-                        throw new Error('Form submission failed');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was a problem sending your thoughts. Please try again later.');
-                });
-            } else {
-                alert("Please fill out all required fields!");
+            if (!title || !body || !emoji) {
+                alert("Please fill out all required fields and select an emoji!");
+                return;
             }
-        });
-    </script>`;
-                
-                console.log("Email that would be sent to vedantsaran@gmail.com:");
-                console.log(emailBody);
-                
+            
+            // Update the email subject with the title
+            document.getElementById('email-subject').value = `Sweet Thoughts: ${title}`;
+            
+            // Submit the form using fetch API for better control
+            fetch(this.action, {
+                method: 'POST',
+                body: new FormData(this),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
                 // Show success message
                 document.getElementById('success-message').classList.remove('hidden');
                 
@@ -391,12 +372,13 @@
                 setTimeout(function() {
                     document.getElementById('success-message').classList.add('hidden');
                 }, 5000);
-            } else {
-                alert("Please fill out all required fields and select an emoji!");
-            }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was a problem sending your thoughts. Please try again later.');
+            });
         });
     </script>
 </body>
 </html>
-
 
