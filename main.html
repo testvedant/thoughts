@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Gwen's Thoughts</title>
+    <style>
+        body {
+            font-family: 'Verdana', 'Arial', sans-serif;
+            background-color: #ffecf3;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #ff6b9c;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(255, 107, 156, 0.3);
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #ff6b9c;
+            margin-bottom: 20px;
+            font-family: 'Verdana', 'Arial', sans-serif;
+        }
+        
+        .hearts {
+            color: #ff6b9c;
+            font-size: 24px;
+            margin: 15px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ffb6c1;
+            border-radius: 10px;
+            font-family: 'Verdana', 'Arial', sans-serif;
+            font-size: 16px;
+            color: #333;
+            box-sizing: border-box;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #ff6b9c;
+            box-shadow: 0 0 8px rgba(255, 107, 156, 0.5);
+        }
+        
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: #ff6b9c;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Verdana', 'Arial', sans-serif;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: #ff4b86;
+            transform: scale(1.05);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .emoji-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .emoji-option {
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .emoji-option:hover {
+            transform: scale(1.2);
+        }
+        
+        .selected {
+            transform: scale(1.3);
+            text-shadow: 0 0 10px rgba(255, 107, 156, 0.7);
+        }
+        
+        .success-message {
+            background-color: #e6ffe6;
+            border: 2px solid #99ff99;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            color: #339933;
+        }
+        
+        .cute-icon {
+            font-size: 30px;
+            margin: 10px 0;
+        }
+        
+        .greeting {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #ff4b86;
+            font-weight: bold;
+        }
+
+        /* Admin panel styles */
+        #grievances-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+            text-align: left;
+            border: 2px solid #ffb6c1;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .grievance-card {
+            background-color: #fff5f8;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 5px solid #ff6b9c;
+        }
+
+        .grievance-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .grievance-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #ff4b86;
+        }
+
+        .grievance-emoji {
+            font-size: 24px;
+        }
+
+        .grievance-meta {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .grievance-body {
+            margin-top: 10px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .button-group button {
+            flex: 1;
+        }
+        
+        p {
+            color: #555;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Form -->
+        <div id="login-form">
+            <h1>Gwen's Thoughts</h1>
+            <div class="hearts">♥ ♥ ♥</div>
+            <p></p>
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            
+            <button id="login-button">Login</button>
+            <p id="login-error" style="color: red; display: none;">Username or password incorrect</p>
+        </div>
+        
+        <!-- Grievance Form (initially hidden) -->
+        <div id="grievance-form" class="hidden">
+            <h1>Sweet Thoughts</h1>
+            <div id="greeting" class="greeting">Welcome back! ♥</div>
+            <div class="hearts">♥ ♥ ♥</div>
+            
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" placeholder="What's this about?">
+            </div>
+            
+            <div class="form-group">
+                <label for="body">What's on your mind?</label>
+                <textarea id="body" placeholder="Tell me everything..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="seriousness">How serious is this? (1-10)</label>
+                <input type="range" id="seriousness" min="1" max="10" value="5">
+                <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                    <span>1</span>
+                    <span>5</span>
+                    <span>10</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>How are you feeling?</label>
+                <div class="emoji-selector">
+                    <div class="emoji-option" data-emoji="😊">😊</div>
+                    <div class="emoji-option" data-emoji="😢">😢</div>
+                    <div class="emoji-option" data-emoji="😡">😡</div>
+                    <div class="emoji-option" data-emoji="🥰">🥰</div>
+                    <div class="emoji-option" data-emoji="😔">😔</div>
+                </div>
+                <input type="hidden" id="selected-emoji" value="">
+            </div>
+            
+            <button id="submit-button">Send Thoughts</button>
+            
+            <div id="success-message" class="success-message hidden">
+                <div class="cute-icon">✓</div>
+                <p>Your thoughts have been sent successfully!</p>
+                <p>Thanks for sharing. It means a lot. ♥</p>
+            </div>
+        </div>
+
+        <!-- Admin Section (hidden by default) -->
+        <div id="admin-panel" class="hidden">
+            <h1>Admin Panel</h1>
+            <div class="hearts">♥ ♥ ♥</div>
+            <p>View all submitted thoughts</p>
+            
+            <div id="grievances-list">
+                <!-- Grievances will be loaded here -->
+                <p>No submissions yet.</p>
+            </div>
+            
+            <button id="download-json">Download as JSON</button>
+            <button id="back-to-form">Back to Form</button>
+        </div>
+    </div>
+
+    <script>
+        // Simple login system
+        document.getElementById('login-button').addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // IMPORTANT: In a real application, this authentication should happen server-side!
+            // This is just a simple demo for educational purposes.
+            if (username && password) {
+                document.getElementById('login-form').classList.add('hidden');
+                document.getElementById('grievance-form').classList.remove('hidden');
+                document.getElementById('greeting').textContent = `Welcome back, ${username}! ♥`;
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        });
+        
+        // Emoji selection
+        const emojiOptions = document.querySelectorAll('.emoji-option');
+        emojiOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all options
+                emojiOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                
+                // Update hidden input value
+                document.getElementById('selected-emoji').value = this.getAttribute('data-emoji');
+            });
+        });
+        
+        // Storage for all submitted grievances
+        let grievancesData = {
+            email: "vedantsaran@gmail.com",
+            submissions: []
+        };
+
+        // Function to download data as JSON file
+        function downloadJSON(data, filename) {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", filename);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        // Form submission
+        document.getElementById('submit-button').addEventListener('click', function() {
+            const username = document.getElementById('greeting').textContent.replace('Welcome back, ', '').replace('! ♥', '');
+            const title = document.getElementById('title').value;
+            const body = document.getElementById('body').value;
+            const seriousness = document.getElementById('seriousness').value;
+            const emoji = document.getElementById('selected-emoji').value;
+            const timestamp = new Date().toISOString();
+            
+            if (title && body && emoji) {
+                // Create a grievance object
+                const grievance = {
+                    username: username,
+                    title: title,
+                    body: body,
+                    seriousness: seriousness,
+                    mood: emoji,
+                    timestamp: timestamp
+                };
+                
+                // Add to our data storage
+                grievancesData.submissions.push(grievance);
+                
+                // Save to local storage as backup
+                localStorage.setItem('grievances', JSON.stringify(grievancesData));
+                
+                // Create JSON file for download
+                downloadJSON(grievancesData, 'sweet_thoughts_submissions.json');
+                
+                // Format for email (in a real app)
+                const emailBody = `
+                    Title: ${title}
+                    Seriousness: ${seriousness}/10
+                    Mood: ${emoji}
+                    Submitted: ${new Date().toLocaleString()}
+                    
+                    Message:
+                    ${body}
+                `;
+                
+                console.log("Email that would be sent to vedantsaran@gmail.com:");
+                console.log(emailBody);
+                
+                // Show success message
+                document.getElementById('success-message').classList.remove('hidden');
+                
+                // Clear form
+                document.getElementById('title').value = '';
+                document.getElementById('body').value = '';
+                document.getElementById('seriousness').value = '5';
+                emojiOptions.forEach(opt => opt.classList.remove('selected'));
+                document.getElementById('selected-emoji').value = '';
+                
+                // Hide success message after a few seconds
+                setTimeout(function() {
+                    document.getElementById('success-message').classList.add('hidden');
+                }, 5000);
+            } else {
+                alert("Please fill out all required fields and select an emoji!");
+            }
+        });
+    </script>
+</body>
+</html>
