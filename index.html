@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sweet Thoughts</title>
+    <title>Gwen's Thoughts</title>
     <style>
         body {
             font-family: 'Verdana', 'Arial', sans-serif;
@@ -205,9 +205,9 @@
     <div class="container">
         <!-- Login Form -->
         <div id="login-form">
-            <h1>Sweet Thoughts</h1>
+            <h1>Gwen's Thoughts</h1>
             <div class="hearts">♥ ♥ ♥</div>
-            <p>Share what's on your mind with your special someone</p>
+            <p></p>
             
             <div class="form-group">
                 <label for="username">Username</label>
@@ -225,7 +225,7 @@
         
         <!-- Grievance Form (initially hidden) -->
         <div id="grievance-form" class="hidden">
-            <h1>Sweet Thoughts</h1>
+            <h1>Gwen's Thoughts</h1>
             <div id="greeting" class="greeting">Welcome back! ♥</div>
             <div class="hearts">♥ ♥ ♥</div>
             
@@ -266,7 +266,7 @@
                 <input type="hidden" id="form-username" name="username" value="">
                 
                 <!-- Add the _subject field for email subject -->
-                <input type="hidden" name="_subject" id="email-subject" value="Sweet Thoughts">
+                <input type="hidden" name="_subject" id="email-subject" value="Gwen's Thoughts">
                 
                 <button type="submit" id="submit-button">Send Thoughts</button>
             </form>
@@ -341,7 +341,7 @@
             }
             
             // Update the email subject with the title
-            document.getElementById('email-subject').value = `Sweet Thoughts: ${title}`;
+            document.getElementById('email-subject').value = `Gwen's Thoughts: ${title}`;
             
             // Submit the form using fetch API for better control
             fetch(this.action, {
