@@ -223,7 +223,7 @@
             <p id="login-error" style="color: red; display: none;">Username or password incorrect</p>
         </div>
         
-        <!-- Grievance Form (initially hidden) -->
+        <!-- Grievance Form -->
         <div id="grievance-form" class="hidden">
             <h1>Gwen's Thoughts</h1>
             <div id="greeting" class="greeting">Welcome back! ♥</div>
@@ -262,10 +262,10 @@
                     <input type="hidden" id="selected-emoji" name="mood" value="">
                 </div>
                 
-                <!-- Hidden field for username -->
+              
                 <input type="hidden" id="form-username" name="username" value="">
                 
-                <!-- Add the _subject field for email subject -->
+
                 <input type="hidden" name="_subject" id="email-subject" value="Gwen's Thoughts">
                 
                 <button type="submit" id="submit-button">Send Thoughts</button>
@@ -278,14 +278,13 @@
             </div>
         </div>
 
-        <!-- Admin Section (hidden by default) -->
         <div id="admin-panel" class="hidden">
             <h1>Admin Panel</h1>
             <div class="hearts">♥ ♥ ♥</div>
             <p>View all submitted thoughts</p>
             
             <div id="grievances-list">
-                <!-- Grievances will be loaded here -->
+
                 <p>No submissions yet.</p>
             </div>
             
